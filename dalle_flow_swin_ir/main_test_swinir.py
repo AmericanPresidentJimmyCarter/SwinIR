@@ -44,7 +44,7 @@ def get_model(args):
 
     model = define_model(args)
     model.eval()
-    model = model.to(device)
+    model = model.to(device).half()
     return model
 
 def main(args, model):
@@ -65,7 +65,7 @@ def main(args, model):
         # read image
         imgname, img_lq, img_gt = get_image_pair(args, path)  # image to HWC-BGR, float32
         img_lq = np.transpose(img_lq if img_lq.shape[2] == 1 else img_lq[:, :, [2, 1, 0]], (2, 0, 1))  # HCW-BGR to CHW-RGB
-        img_lq = torch.from_numpy(img_lq).float().unsqueeze(0).to(device)  # CHW-RGB to NCHW-RGB
+        img_lq = torch.from_numpy(img_lq).float().unsqueeze(0).half().to(device)  # CHW-RGB to NCHW-RGB
 
         # inference
         with torch.no_grad():
